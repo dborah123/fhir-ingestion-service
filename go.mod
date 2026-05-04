@@ -1,4 +1,4 @@
-module github.com/dborah123/ingestion-service
+module github.com/dborah123/fhir-ingestion-service
 
 go 1.24
 

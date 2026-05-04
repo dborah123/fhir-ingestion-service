@@ -1,15 +1,27 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
+
+	"github.com/dborah123/fhir-ingestion-service/internal/api"
+	"github.com/dborah123/fhir-ingestion-service/internal/publisher"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 )
 
 func main() {
-	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintln(w, "OK")
-	})
+	r := chi.NewRouter()
 
-	fmt.Println("Server running on :8080")
-	http.ListenAndServe(":8080", nil)
+	// Standard Middleware
+	r.Use(middleware.Logger)    // Structured logging
+	r.Use(middleware.Recoverer) // Don't crash on panics
+
+	// Dependencies
+	pub := publisher.NewMockPublisher()
+
+	// Routes
+	r.Get("/health", api.HealthHandler(pub))
+
+	http.ListenAndServe(":8080", r)
 }
