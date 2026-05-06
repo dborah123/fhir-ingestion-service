@@ -22,6 +22,7 @@ func main() {
 
 	// Routes
 	r.Get("/health", api.HealthHandler(pub))
+	r.Post("/ingest/fhir", api.FhirIngest())
 
 	http.ListenAndServe(":8080", r)
 }
